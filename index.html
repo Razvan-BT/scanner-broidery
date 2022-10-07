@@ -28,41 +28,48 @@
     <script>
 
 
-        function docReady(fn) {
+        // function docReady(fn) {
 
-            // see if DOM is already available
-            if (document.readyState === "complete" || document.readyState === "interactive") {
-                // call on next available tick
-                setTimeout(fn, 1);
-            } else {
+        //     // see if DOM is already available
+        //     if (document.readyState === "complete" || document.readyState === "interactive") {
+        //         // call on next available tick
+        //         setTimeout(fn, 1);
+        //     } else {
 
-                document.addEventListener("DOMContentLoaded", fn);
+        //         document.addEventListener("DOMContentLoaded", fn);
 
 
-            }
+        //     }
+        // }
+
+
+
+        // docReady(function () {
+
+        //     var lastResult, countResults = 0;
+        //     function onScanSuccess(decodedText, decodedResult) {
+        //         if (decodedText !== lastResult) {
+        //             ++countResults;
+        //             lastResult = decodedText;
+        //             html5QrcodeScanner.clear();
+        //         }
+        //     }
+
+        //     var html5QrcodeScanner = new Html5QrcodeScanner(
+
+        //         "reader", { fps: 10, qrbox: 250, rememberLastUsedCamera: false });
+
+        //     html5QrcodeScanner.render(onScanSuccess);
+
+        // });
+  
+        function onScanSuccess(decodedText, decodedResult) {
+            console.log(`Code scanned = ${decodedText}`, decodedResult);
         }
-
-
-
-        docReady(function () {
-
-            var lastResult, countResults = 0;
-            function onScanSuccess(decodedText, decodedResult) {
-                if (decodedText !== lastResult) {
-                    ++countResults;
-                    lastResult = decodedText;
-                    html5QrcodeScanner.clear();
-                }
-            }
-
-            var html5QrcodeScanner = new Html5QrcodeScanner(
-
-                "reader", { fps: 10, qrbox: 250, rememberLastUsedCamera: false });
-
-            html5QrcodeScanner.render(onScanSuccess);
-
-        });
-
+        var html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader", { fps: 10, qrbox: 250 });
+        html5QrcodeScanner.render(onScanSuccess);
+        html5QrcodeScanner.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, onScanSuccess);
 
     </script>
 
