@@ -5,11 +5,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-    <script src="src/html5-qrcode.min.js"></script>
-    <script src="src/qr-scan.js"></script>
-    <link rel="stylesheet" href="src/style.css">
+    <script src="src/html5-qrcode.min.js" defer></script>
+    <script src="src/qr-scan.js" defer></script>
+    <link rel="stylesheet" href="src/css/style.css">
     <title>Broidery Flux</title>
 </head>
 
@@ -19,12 +21,13 @@
 
             <div class="search-bar">
                 <input type="text" placeholder="VTE-12345" id="searchbar">
-                <button class="btnsearch">&#xF52A;</button>
             </div>
-
+            <div class="btn-click">
+                <button id="btnsearch"><i class="fa fa-search"></i></button>
+            </div>
         </div>
     </nav>
-    <div id="reader" width="600px"></div>
+    <div id="qr-reader" width="600px"></div>
 
 </body>
 
