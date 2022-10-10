@@ -3,28 +3,7 @@ $(document).ready(function () {
     let vteId = "";
     let lastItemScanned;
     let statusScann = false;
-
-    console.warn("Page loaded!")
-    function onScanSuccess(decodedText, decodedResult) {
-        console.log(`Scan result ${decodedText}`, decodedResult);
-        vteId = decodedText;
-        if (vteId != lastItemScanned) {
-            if ($('#searchbar').val().length <= 0) {
-                if(statusScann == false){    
-                    $('#searchbar').val(vteId)
-                    lastItemScanned = vteId;
-                    alert(decodedText)
-                    checkDataFrom__();
-                    html5qrcode.stop();
-                }
-            }
-        
-        } else {
-            statusScann = false;
-            alert(`You already scanned this VTE! ${lastItemScanned} VTE ${vteId}`)
-        }
-        // console.log('decodedText:', decodedText);
-    }
+    let submitBtn = false;
     let html5qrcode = new Html5Qrcode("qr-reader", {
         // Use this flag to turn on the feature.
         experimentalFeatures: {
@@ -35,14 +14,26 @@ $(document).ready(function () {
 
 
     });
+
+    console.warn("Page loaded!")
+    function onScanSuccess(decodedText, decodedResult) {
+        if (lastItemScanned != decodedText) {
+
+            lastItemScanned = decodedText;
+            vteId = lastItemScanned;
+
+            checkDataFrom__();
+            alert(`Scan result ${decodedText}`, decodedResult);
+        }
+
+    }
     const scanConfig = { fps: 1, qrbox: 600 };
     // If you want to prefer front camera
 
 
     if (statusScann) {
         statusScann = false;
-        html5qrcode.stop();
-        html5qrcode.clear();
+        disableScanning();
     } else {
         html5qrcode.start({ facingMode: "environment" }, scanConfig, onScanSuccess);
     }
@@ -50,27 +41,20 @@ $(document).ready(function () {
 
     function checkDataFrom__() {
 
-        if (vteId.length > 0 && vteId != "") 
+        if (vteId.length > 0) 
         {
-            if($('#searchbar').val().length > 0) 
-            {
-                $('#searchbar').val(vteId);
-                alert("checkDataFrom_ called");
-                alert(`VTE ${vteId} in ${takeValFromInput}`)
-                TakeDataFromNode(vteId)
-                $('#btnsearch').click();
-            }
+            $('#searchbar').val(vteId);
+            alert("checkDataFrom_ called");
+            alert(`VTE ${vteId} in ${$('#searchbar').val()}`)
+            submitBtn = true;
         }
+        if(submitBtn == true) TakeDataFromNode($('#searchbar').val());
     }
 
 
 
     function TakeDataFromNode(input) {
-        $('#btnsearch').on('click', function () {
-            alert("btn was clicked")
-            $('#searchbar').val("");
-            vteId = "";
-            statusScann = false;
+        $('#btnsearch').click(function () {
             // let params = "http://127.0.0.1:1880/broidery_vte?v="+decodedText;
             let params = "https://node.formens.ro/broidery_vte?v=" + input
             fetch(params)
@@ -80,9 +64,21 @@ $(document).ready(function () {
                 .then((data) => {
                     alert(data)
                 })
-        })
 
+            // alert("btn was clicked")
+            $('#searchbar').val("");
+            lastItemScanned = '';
+            vteId = "";
+            statusScann = false;
+            submitBtn = false;
+        })
+        disableScanning();
     }
 
+
+    const disableScanning = () => {
+        html5QrCode.stop();
+        html5QrCode.clear();
+    }
 });
 
