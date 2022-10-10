@@ -1,9 +1,8 @@
-
+let vteId = "";
+let lastItemScanned;
+let statusScann = false;
+let submitBtn = false;
 $(document).ready(function () {
-    let vteId = "";
-    let lastItemScanned;
-    let statusScann = false;
-    let submitBtn = false;
     let html5qrcode = new Html5Qrcode("qr-reader", {
         // Use this flag to turn on the feature.
         experimentalFeatures: {
@@ -24,12 +23,11 @@ $(document).ready(function () {
 
             checkDataFrom__();
             alert(`Scan result ${decodedText}`, decodedResult);
-        }
+        } 
 
     }
     const scanConfig = { fps: 1, qrbox: 600 };
     // If you want to prefer front camera
-
 
     if (statusScann) {
         statusScann = false;
@@ -38,7 +36,7 @@ $(document).ready(function () {
         html5qrcode.start({ facingMode: "environment" }, scanConfig, onScanSuccess);
     }
 
-
+    let vte_name = '';
     function checkDataFrom__() {
 
         if (vteId.length > 0) 
@@ -46,12 +44,14 @@ $(document).ready(function () {
             $('#searchbar').val(vteId);
             alert("checkDataFrom_ called");
             alert(`VTE ${vteId} in ${$('#searchbar').val()}`)
-            submitBtn = true;
+            // submitBtn = true;
+            TakeDataFromNode($('#searchbar').val());
+            // vte_name = $('#searchbar').val();
+            disableScanning();
         }
-        if(submitBtn == true) TakeDataFromNode($('#searchbar').val());
+        // if(submitBtn == true) vte_name = $('#searchbar').val();
+        disableScanning();
     }
-
-
 
     function TakeDataFromNode(input) {
         $('#btnsearch').click(function () {
@@ -72,13 +72,17 @@ $(document).ready(function () {
             statusScann = false;
             submitBtn = false;
         })
-        disableScanning();
     }
 
 
     const disableScanning = () => {
         html5QrCode.stop();
-        html5QrCode.clear();
+        html5QrCode.clear().then(_ => {
+            // the UI should be cleared here      
+        }).catch(error => {
+            // Could not stop scanning for reasons specified in `error`.
+            // This conditions should ideally not happen.
+        });
     }
 });
 
