@@ -5,29 +5,106 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+    integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+
+    <link href="https://unpkg.com/bootstrap-table@1.20.2/dist/bootstrap-table.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
     integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-    <script src="src/html5-qrcode.min.js" defer></script>
-    <script src="src/qr-scan.js" defer></script>
-    <link rel="stylesheet" href="src/css/style.css">
+    
+    
+    <script src="src/broidery.js" defer></script>
     <title>Broidery Flux</title>
 </head>
 
 <body>
-    <nav>
-        <div class="nav-bar">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+        crossorigin="anonymous"></script>
 
-            <div class="search-bar">
-                <input type="text" placeholder="VTE-12345" id="searchbar">
-            </div>
-            <div class="btn-click">
-                <button id="btnsearch"><i class="fa fa-search"></i></button>
-            </div>
+
+    <script src="https://unpkg.com/bootstrap-table@1.20.2/dist/bootstrap-table.min.js"></script>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+        
+                <div class="mb-3">
+                    <label for="Vte" class="form-label">VTE</label>
+                    <input type="text" class="form-control" id="Vte">
+                </div>
+                <button id="btnsearch" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><strong>Verifica</strong></button>
+                <!-- <p class="card-text">
+
+              <table class="table table-hover" data-mobile-responsive="true" data-toggle="table"
+                  id="resulttable" data-click-to-select="true">
+                  <thead>
+                      <tr>
+                          <th data-field="Fabric">Preview</th>
+                          <th data-field="Vte">VTE</th>
+                          <th data-field="mono">Monograme</th>
+                          <th data-field="color">Color</th>
+
+                      </tr>
+                    </thead>
+              </table> 
+
+              </p> -->
+            </div>    
         </div>
-    </nav>
-    <div id="qr-reader" width="600px"></div>
+    </div> 
+
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"> 
+                     VTE Data
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-9">
+                          <div class="row">
+                            <div class="col-8 col-sm-6">
+                                <img alt="Preview" id="imgpreview" src="">
+
+                            </div>
+                            <div class="col-1 col-md-6">
+                                <p class="card-text">VTE:
+                                    <input type="text" class="form-control"  id="id" readonly>
+                                </p>
+
+                                <p class="card-text">Monograma:
+                                    <input type="text" class="form-control"  id="mono" readonly>
+                                </p>
+
+                                <p class="card-text">Cod culoare:
+                                    <input type="text" class="form-control"  id="color" readonly>
+                                </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="close_button">Close</button>
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="print_button">Print</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
 </body>
 
