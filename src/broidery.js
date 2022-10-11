@@ -17,24 +17,26 @@ $(document).ready(function () {
                 .then((data) => {
                     console.log(data.vteId);
 
-                    if(data.notReload == true) modalUpdate(data.vteId, data.MonoText, data.color, data.filePNG);
+                    modalUpdate(data.vteId, data.MonoText, data.color, data.filePNG);
                     $('#staticBackdrop').modal('show');
                     $('#Vte').val('');
                 })
         }
 
-        function modalUpdate(id, text, color, img) {
-            console.log(`ID: ${id}, text: ${text}, color: ${color}`);
-            $('#id').val(id)
-            $('#mono').val(text)
-            $('#color').val(color)
+            function modalUpdate(id, text, color, img) {
+                console.log(`ID: ${id}, text: ${text}, color: ${color}`);
+                $('#id').val(id)
+                $('#mono').val(text)
+                $('#color').val(color)
 
-            console.log('Image src ', img);
-            generatedId = id;
+                console.log('Image src ', img);
+                generatedId = id;
 
-            // let stringImg = img.replaceAll("\\", "/");
-            if(img.length > 0) $('#imgpreview').attr('src', `${id}.png`);
-        }
+                // let stringImg = img.replaceAll("\\", "/");
+                if(img.length > 0) $('#imgpreview').attr('src', `${id}.png`);
+
+                $('#print_button').click(); // generate Auto .dst file;
+            }
 
     });
 
