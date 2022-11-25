@@ -5,33 +5,27 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
     integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-
-    <link href="https://unpkg.com/bootstrap-table@1.20.2/dist/bootstrap-table.min.css" rel="stylesheet">
+   
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     
-    
+    <link rel="stylesheet" href="./src/style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.png">
     <script src="src/broidery.js" defer></script>
     <title>Broidery Flux</title>
 </head>
 
 <body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
-        crossorigin="anonymous"></script>
 
-
-    <script src="https://unpkg.com/bootstrap-table@1.20.2/dist/bootstrap-table.min.js"></script>
-
+    <!-- <link rel="stylesheet" href="css/style.css"> -->
     <div class="container">
+      <div id="fms-success-msg"></div>
+      <div class="alert alert-danger" role="alert" id="alrt">
+      </div>
         <div class="card">
             <div class="card-body">
         
@@ -40,72 +34,28 @@
                     <input type="text" class="form-control" id="Vte">
                 </div>
                 <button id="btnsearch" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><strong>Verifica</strong></button>
-                <!-- <p class="card-text">
-
-              <table class="table table-hover" data-mobile-responsive="true" data-toggle="table"
-                  id="resulttable" data-click-to-select="true">
-                  <thead>
-                      <tr>
-                          <th data-field="Fabric">Preview</th>
-                          <th data-field="Vte">VTE</th>
-                          <th data-field="mono">Monograme</th>
-                          <th data-field="color">Color</th>
-
-                      </tr>
-                    </thead>
-              </table> 
-
-              </p> -->
-            </div>    
-        </div>
+                <div id="fms-how-many"></div>
+              </div>
+              <div class="container">
+                <img id="imgpreview">
+              </div>
+          </div>
+          <!-- <a href="" id="downfile"></a> -->
     </div> 
 
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"> 
-                     VTE Data
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-            <div class="modal-body">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-sm-9">
-                          <div class="row">
-                            <div class="col-8 col-sm-6">
-                                <img alt="Preview" id="imgpreview" src="">
-
-                            </div>
-                            <div class="col-1 col-md-6">
-                                <p class="card-text">VTE:
-                                    <input type="text" class="form-control"  id="id" readonly>
-                                </p>
-
-                                <p class="card-text">Monograma:
-                                    <input type="text" class="form-control"  id="mono" readonly>
-                                </p>
-
-                                <p class="card-text">Cod culoare:
-                                    <input type="text" class="form-control"  id="color" readonly>
-                                </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="close_button">Close</button>
-              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="print_button">Print</button>
-            </div>
-          </div>
+    <div class="container tableInfo" style="border: 2px solid black; margin-top: 10px;"> 
+      <legend><h3><strong>Dosar:</strong> <span id="VTEid"></span></h3></legend>
+      <div class="data-info">
+        <div class="preview-img-with-pos">
+          <img id="imgPos"/>
+        </div>
+        <div class="details-about-brod">
+          <h3><strong>Position:</strong> <span id="position"></span></h3>
+          <h3><strong>Culoare:</strong> <span id="color"></span></h3>
+          <h3><strong>Monograma:</strong> <span id="monogramatext"></span></h3>
         </div>
       </div>
-
+    </div>
 </body>
 
 </html>

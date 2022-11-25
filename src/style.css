@@ -1,0 +1,37 @@
+* {
+    box-sizing: border-box;
+}
+
+#fms-how-many {
+    display: inline-block;
+    width: 40%;
+}
+
+.fms-count {
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    color: white;
+    background: #2f7500;
+}
+
+
+.data-info {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 30px;
+    width: 100%;
+}
+
+.preview-img-with-pos {
+    width: 50%;
+}
+
+.details-about-brod {
+    width: 50%;
+}
+
+.tableInfo {
+    display: none;
+}
