@@ -25,13 +25,29 @@
 }
 
 .preview-img-with-pos {
-    width: 50%;
+    width: 30%;
+    /* display: grid;
+    grid-template-columns: repeat(2, 50px);
+    row-gap: 10px;
+    column-gap: 10px; */
 }
 
+img#imgPos{
+    height: 150px;
+    width: 150px;
+}
 .details-about-brod {
-    width: 50%;
+    width: 30%;
 }
 
 .tableInfo {
+    display: none;
+}
+
+#details-brod {
+    margin-bottom: 10%;
+}
+
+.comments {
     display: none;
 }

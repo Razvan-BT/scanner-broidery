@@ -1,4 +1,6 @@
-var positions = [];
+var positions = [], commentsHTML = "";
+
+$('#seeDosar').hide();
 $(document).ready(function () {
     console.warn('Page loaded!');
     let fmsCount = 0;
@@ -13,27 +15,24 @@ $(document).ready(function () {
 
         function checkBroideryFlux(input) {
             let inp = input.toUpperCase();
+            if(inp.startsWith('HTTPS')) inp = inp.replace('HTTPS://NODE.FORMENS.RO/Q/', '');   
             if (inp.includes('VTE-')) {
-
-                $.ajaxSetup({
-                    timeout: 10000,
-                    retryAfter: 20000
-                });
+                
                 let params = '',
                     machine = '';
 
                 if (window.location.hash == '#machine_1') machine = '1';
                 else if (window.location.hash == '#machine_2') machine = '2';
+                else if (window.location.hash == '#machine_3') machine = '3';
+                else if (window.location.hash == '#machine_4') machine = '4';
                 else machine = '';
 
                 if (machine != '') {
-                    if (machine == '1' || machine == '2') {
-                        if (localStorage.getItem('lastVte') != null) params = "http://localhost:1880/broidery_vte?orderId=" + inp + "&brod_machine=" + machine + "&lastVte=" + localStorage.getItem('lastVte');
-                        else params = "http://localhost:1880/broidery_vte?orderId=" + inp + "&brod_machine=" + machine + "&lastVte=null";
-
-                        // if (localStorage.getItem('lastVte') != null) params = "http://172.16.102.153:1880/broidery_vte?orderId="+inp+"&brod_machine="+machine+"&lastVte="+localStorage.getItem('lastVte');
-                        // else params = "http://172.16.102.153:1880/broidery_vte?orderId="+inp+"&brod_machine="+machine+"&lastVte=null";
-                    
+                    if (machine == '1' || machine == '2' || machine == '3' || machine == '4') {
+                        var hosted = 'http://172.16.102.153:1880';
+                        // var hosted = 'http://localhost:1880';
+                        if (localStorage.getItem('lastVte') != null) params = hosted + "/broidery_vte?orderId=" + inp + "&brod_machine=" + machine + "&lastVte=" + localStorage.getItem('lastVte');
+                        else params = hosted + "/broidery_vte?orderId=" + inp + "&brod_machine=" + machine + "&lastVte=null";
 
                         func = function () {
                             $.ajax({
@@ -41,32 +40,88 @@ $(document).ready(function () {
                                 type: 'GET',
                                 success: function (data) {
                                     console.log(params);
-                                    // If text != '' or > 0 call generateData; if doesn't exist send a message
-
                                     if (data.TextMonograme && data.TextMonograme.length > 0) {
                                         // generateData(input);
-                                        $('#imgpreview').attr('src', "data:image/png;base64, " + data.img);
+                                        if(data.delor == 0)  { 
+                                            $('#imgpreview').attr('src', "data:image/png;base64, " + data.img);
+                                            $('#ifDelor').hide();
+                                            $('#imgpreview').show();
+                                        }
+                                        else {
+                                            $('#imgpreview').hide();
+                                            $('#ifDelor').text("DELOR");
+                                            $('#ifDelor').show();
+                                        }
                                         $('#Vte').val('');
 
+                                        // Apar datele daca VTE-ul este valid.
+                                        $('.tableInfo').show();
+                                        $('.comments').show();
+                                        $('#seeDosar').show();
+                                        
+                                        // Extragere commentarii
+                                        let comm = [];
+                                        for (const [key, value] of Object.entries(data.comments)) {
+                                            // for (let c = 0; c < Object.values(data.comments).length; c++) {
+                                            comm = value;
+                                            if (key.length > 0) {
+                                                $('.comments').css('display', 'block');
+                                                comments = '<p>' + `${Object.values(comm)}` + '</p>';
+                                                $('#output_comments').append(comments);
+                                                comments = "";
 
-                                        positions.push(JSON.perse(data.positionBrodery));
+                                                commentsHTML = commentsHTML.concat(`
+                                                    <p>${Object.values(comm)}</p>
+                                                `)
+                                            } else {
+                                                $('.comments').css('display', 'none');
+                                            }
+                                        }
+                                        $('.comments').html(commentsHTML);
+                                        commentsHTML = "";
+                                        
+                                        // Extragere pozitii BROD
+                                        let getPosition = [];
+  
+                                        for (const [key, value] of Object.entries(data.positionBrodery)) {
+                                            positions = value;
+
+                                            if (key.length > 0) console.log("[POSITION FIND] " + Object.values(positions));
+                                            else console.log("[POSITION NOT FIND]");
+
+                                            getPosition.push(...[positions]);
+                                        }
+                                        console.log(getPosition);
                                         $('#VTEid').text(inp);
-                                        $('#monogramatext').text(data.TextMonograme);
-                                        $('#color').text(data.color);
-                                        if(data.positionBrodery?.length) $('#position').text(positions);
-                                        else $('#position').text("-");
                                         $('.tableInfo').css('display', 'block');
+                                        $('#seeDosar').show();
+                                        let positionHTML = "";
+                              
+                                        for (let i = 0; i < getPosition.length; i++) {
+                                            positionHTML = positionHTML.concat(
+                                                `
+                                                <div class="data-info">
+                                                <div class="preview-img-with-pos">
+                                                  <img id="imgPos" src="src/img-pos/${Object.values(getPosition[i])}.jpg"/>
+                                                </div>
+                                                <div class="details-about-brod">
+                                                  <div id="details-brod">
+                                                    <h3><strong>Position:</strong> <span id="position">${Object.values(getPosition[i])}</span></h3>
+                                                    <h3><strong>Culoare:</strong> <span id="color">${data.color}</span></h3>
+                                                    <h3><strong>Font:</strong> <span id="color">${data.font}</span></h3>
+                                                    <h3><strong>Monograma:</strong> <span id="monogramatext">${data.TextMonograme}</span></h3>
+                                                  </div>
+                                                </div>
+                                              </div>`
+                                            )
+                                        }
 
-                                        $('#imgPos').attr('src', ".src/img-pos/" + data.positionBrodery + ".jpg");
-                                        $('#imgPos').attr('alt', positions + " position");
+                                        console.log("RX: " + Object.values(getPosition));
+                                        $('.tableInfo').html(positionHTML);
 
-
-                                        $('#fms-success-msg').html('<div class="alert alert-success" role="alert" id="successOut">Broidery of <strong>' + inp + '</strong> was successfully created! Monograme: <strong>' + data.TextMonograme + '</strong>, color: <strong>' + data.color + '</strong></div>')
                                         localStorage.setItem('lastVte', inp)
-
                                         if (fmsCount >= 1 || localStorage.getItem('howMany') != null) fmsCount = fmsCount + 1;
                                         else fmsCount = Number(localStorage.getItem('howMany')) + 1;
-                                        
                                         if (localStorage.getItem('howMany') == null) localStorage.setItem('howMany', fmsCount.toString());
                                         else {
                                             localStorage.setItem('howMany', fmsCount.toString());
@@ -77,13 +132,16 @@ $(document).ready(function () {
                                     else {
                                         if (data.error == true) {
                                             showMessageError(`ERROR: This ${inp} is invalid.`);
-                                        } else showMessageError(`ERROR: This ${inp} have no monograme text.`);
+                                        } else { 
+                                            showMessageError(`ERROR: This ${inp} have no monograme text.`);
+                                        }
 
+                                        $('.tableInfo').hide();
+                                        $('.comments').hide();
+                                        $('#seeDosar').hide();
+                                        $('#imgpreview').hide();
                                         $('#Vte').val('');
-
                                     }
-
-
                                 },
                                 error: function (e) {
 
@@ -94,9 +152,9 @@ $(document).ready(function () {
                         }
                         func();
                     }
-                    else showMessageError('EROARE: Select broidery machine! Type in: url:/#machine_1 or url:/#machine_2');
+                    else showMessageError('EROARE: Select broidery machine! Type in: url:/#machine_1, url:/#machine_2, /#machine_3 or url:/#machine_4');
                 }
-                else showMessageError('EROARE: Select broidery machine! Type in: url:/#machine_1 or url:/#machine_2');
+                else showMessageError('EROARE: Select broidery machine! Type in: url:/#machine_1, url:/#machine_2, /#machine_3 or url:/#machine_4');
             }
             else {
                 console.log(input);
@@ -125,7 +183,7 @@ $(document).ready(function () {
             else $('#fms-how-many').css('display', 'none');
         }
     }
-
+    
     window.onbeforeunload = function (event) {
         var message = 'Important: Please click on \'Save\' button to leave this page.';
         if (typeof event == 'undefined') {
@@ -178,5 +236,14 @@ $(document).ready(function () {
 [18 oct 2022]
 - Info: adaugata culoarea broderiei.
 
+[20 dec 2022]
+- Reparat un bug legat de mesajele de informatii. 
+    Daca va aparea un mesaj de tip ERORR sau WARN; chiar daca inainte a fost validat un VTE -> va disparea totul. 
+    Acest lucru facea ca felete sa rescrie acelasi VTE pe haine chiar daca nu era valid.
+- Schimbat style-ul pentru afisarea iformatiilor, acuma apare in alta metoda.
+Poza + Info broderie.
+- Daca este delor va aparea separat.
+- Daca in caz ca va pica serverul la Wilcom > se va face manual de fete broderia (Vali a facut acest lucru)
+- adaugate inca 2 masini de brodat.
 
 */
